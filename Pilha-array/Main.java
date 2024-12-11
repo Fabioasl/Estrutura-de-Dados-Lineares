@@ -1,3 +1,4 @@
+
 public class Main{
     public static void main(String[] args) throws EPilhavazia{
         Pilha p1 = new Pilha(2); // Cria uma pilha de tamanho 2
@@ -12,9 +13,5 @@ public class Main{
         System.out.println(p1.isEmpty()); // Verificar novamente se a pilha está vazia
         p1.Empty(); // Esvaziand a pilha
         System.out.println(p1.isEmpty()); // Verifica mais uma vez se a pilha está vazia
-
-       
-    
-
     }
 }
