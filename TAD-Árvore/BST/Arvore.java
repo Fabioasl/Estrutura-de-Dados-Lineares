@@ -18,6 +18,14 @@ public No raiz(){
 public  boolean isEmpty(){
 	return raiz == null;
 }
+public void isExternal(No x){
+	if (x.esquerdo == null && x.direito == null){
+		return false;
+	} else{
+		return true;
+
+	}
+}
 public remover (Object x){
 
 }
