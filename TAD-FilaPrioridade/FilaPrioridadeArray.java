@@ -1,19 +1,15 @@
 import java.util.*;
-public class FilaPriodaide{
+public class FilaPriodaideArray{
     private int size;
     private int occupied;
     private Object[] array;
-    public FilaPriodaide(int size){
+    public FilaPriodaideArray(int size){
         this.size = size;
         this.occupied = 0;
         array = new Object[size]
     }
 public int leftChild(int parent){
         return parent * 2 + 1;
-}
-
-public int leftChild(int parent){
-        return parent * 2 ;
 }
 public int rightChild(int parent){
     return parent * 2 + 1;
@@ -30,11 +26,11 @@ public int min(){
 }
 public void removeMin(){
     int temp = array[1]; 
-    array[1] = array[array.size()-1];
-    array[array.size() - 1] = temp;
+    array[1] = array[occupied];
+    array[occupied] = temp;
     this.size--;
     this.occupied--;
-    
+
     // falta o uphead e  o downheap
 }
 public void insert(Object a){
