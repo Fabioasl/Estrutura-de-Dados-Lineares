@@ -1,5 +1,6 @@
+import java.util.ArrayList;
 class No{
-	Object element;
+	int valor;
 	No esquerdo;
 	No direito;
 	public No(){
@@ -23,33 +24,51 @@ public void isExternal(No x){
 		return false;
 	} else{
 		return true;
-
 	}
 }
-public remover (Object x){
 
-}
-public void buscar(Object x, No raiz){
-
+public No buscar(int x, No no){
+	if (no == null) {
+		return null;
+	}
+	if (no.valor == x){
+		return no;
+	} 
+	if (x < no.valor){
+		return buscar(x, no.esquerdo);
+	} else{
+		return buscar(x,no.direito);
+	}
 }
 public void preOrder(No noAtual){
+	if (noAtual == null) return;
+	System.out.println(noAtual.valor);
+	preOrder(noAtual.esquerdo) // Esquerda
+	preOrder(noAtual.direito) // Direita
 
 }
 public void inOrder(No noAtual){
+	if (noAtual == null) return;
+	inOrder(noAtual.esquerdo) // Esquerda
+	System.out.println(noAtual.valor);
+	inOrder(noAtual.direito) // Direita
 
 }
-public void postOrder(No no Atual){
-
+public void postOrder(No noAtual){
+	if (noAtual == null) return;
+	postOrder(noAtual.esquerdo); // Esquerda
+	postOrder(noAtual.direito); // Direta
+	System.out.println(noAtual.valor);
 }
 public void inserir(Object x, No raiz){
 	No novoNo = new No(){
-		novoNo.element = x;
+		novoNo.valor = x;
 		if (isEmpty()){
 			raiz = novoNo;
 		} else{
 				No temp = raiz;
 				while (temp != null){
-					if (novoNo.element < temp.element){
+					if (novoNo.valor < temp.valor){
 						if (temp.esquerdo == null){
 							temp.esquerdo = novoNo;
 							break;
