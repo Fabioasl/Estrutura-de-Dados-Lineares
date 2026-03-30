@@ -43,11 +43,11 @@ public class Arvore{
 		    return buscar(x,no.direito);
 	    }
     }
-    public No rotacionarEsquerda(No A, no B){
+    public No rotacionarEsquerda(No no){
 
     }
 
-    public No rotacionarDireita(No A, no B){
+    public No rotacionarDireita(No no){
 
     }
 
