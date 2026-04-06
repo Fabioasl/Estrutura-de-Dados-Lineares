@@ -66,11 +66,52 @@ public class Arvore{
         
         noNovo.setPai(paino);
         noNovo.setEsquerdo(no);
+        FB_no_novo = no.getFB() + 1 + min(noNovo.getFB(),0);
+        FB_noNovo_novo = noNovo.getFB() - 1 + max(FB_no_novo,0);
+
+        no.setFB(FB_no_novo);
+        noNovo.setFB(FB_noNovo_novo);
 
         return noNovo;
     }
 
     public No rotacionarDireita(No no){
+        No paiNo = no.getPai();
+        no noNovo = no.getEsquerdo()
+        if (noNovo.getEsquerdo != null){
+            No direito = noNovo.getDireito();
+            direito.setPai(no);
+        } else{
+            noNovo.setEsquerdo(null);
+        }
+        if (paiNo != null) {
+            if (paiNo.getDireito() == no) {
+                paiNo.setDireito(noNovo);
+            } else {
+                paiNo.setEsquerdo(noNovo);
+            }
+        }
+        noNovo.setPai(noPai);
+        noNovo.setDireito(no);
+
+        FB_no_novo = no.getFB - 1 - max(noNovo.fb, 0);
+        FB_noNovo_novo = noNovo.getFB - 1 + min(FB_no_novo, 0);
+
+        no.setFB(FB_no_novo);
+        noNovo.setFB(FB_noNovo_novo);
+
+        return noNovo;
+
+
+    }
+    public No RotacaoDuplaEsquerda(No no){ // -2 e +1 = RDE
+        no.setDireito(rotacionarDireita(no.getDireita())); // Falando pro no que vai rotacionar e que sua nova direita vai ser o resultado da rotação do seu filho a direita
+        return rotacionarEsquerda(no);
+
+    }
+    public No RotacaoDuplaDireita(No no){ // +2 e -1 = RDD
+        no.setEsquerdo(rotacionarEsquerda(no.getEsquerdo())); // Falando pro no que vai rotacionar que sua nova esquerda vai ser o resultado da rotação do seu filho a esquerda
+        return rotacionarDireita(no);
 
     }
     public void AtualizarFB(){
@@ -88,18 +129,21 @@ public class Arvore{
     public No getPai(){
         return No.pai;
     }
-
+    public int getFB(){
+        return fb;
+    }
+    public void setFB(int fb){
+        this.fb = fb;
+    }
     public void setPai(No noPai){
         this.noPai = noPai;
     }
 
-    public void setEsquerdo(No no, int valor){
+    public void setEsquerdo(No no){
         this.no = no;
-        this.valor = valor;
     }
 
-        public void setDireito(No no, int valor){
+    public void setDireito(No no){
         this.no = no;
-        this.valor = valor;
     }
 }
