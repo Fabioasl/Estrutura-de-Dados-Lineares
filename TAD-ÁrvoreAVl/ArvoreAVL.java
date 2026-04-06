@@ -14,8 +14,8 @@ class No{
 
 public class Arvore{
 	No raiz;
-	public Arvore(){
-		this.raiz = null;
+	public Arvore(No raiz){
+		this.raiz = raiz;
     }
     public No raiz(){
         return raiz;
@@ -43,20 +43,45 @@ public class Arvore{
 		    return buscar(x,no.direito);
 	    }
     }
-    public No rotacionarEsquerda(No no){
+    // Utilizei os valores 5 10 e 9 para ajudar na compreensão do código
+    public No rotacionarEsquerda(No no){ // "5" 
+        No paiNo = no.getPai() //  pai do no  "5"
+        No noNovo = no.getDireito() // no "10" é o que vai subir
 
+        if (noNovo.getEsquerdo != null ){ // Caso se o nó que for subir tiver um filho esquerdo
+            noNovoEsquerdo = noNovo.getEsquerdo();
+            no.setDireito(noNovoEsquerdo);
+            noNovoEsquerdo.setPai(no);
+        } else{
+            no.setDireito(null);
+        }
+
+        if (paiNo != null) {
+            if (paiNo.getEsquerdo() == no) {
+                paiNo.setEsquerdo(noNovo);
+            } else {
+                paiNo.setDireito(noNovo);
+            }
+        }
+        
+        noNovo.setPai(paino);
+        noNovo.setEsquerdo(no);
+
+        return noNovo;
     }
 
     public No rotacionarDireita(No no){
 
     }
-
+    public void AtualizarFB(){
+        
+    }
     // Get e Set
     public No getEsquerdo(){
         return No.esquerdo;
     }
 
-    public No getDireto(){
+    public No getDireito(){
         return No.direito;
     }
 
