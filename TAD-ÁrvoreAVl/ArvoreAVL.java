@@ -44,7 +44,7 @@ public class Arvore{
 	    }
     }
     // Utilizei os valores 5 10 e 9 para ajudar na compreensão do código
-    public No rotacionarEsquerda(No no){ // "5" 
+    public void rotacionarEsquerda(No no){ // "5" 
         No paiNo = no.getPai() //  pai do no  "5"
         No noNovo = no.getDireito() // no "10" é o que vai subir
 
@@ -71,11 +71,9 @@ public class Arvore{
 
         no.setFB(FB_no_novo);
         noNovo.setFB(FB_noNovo_novo);
-
-        return noNovo;
     }
 
-    public No rotacionarDireita(No no){
+    public void rotacionarDireita(No no){
         No paiNo = no.getPai();
         no noNovo = no.getEsquerdo()
         if (noNovo.getEsquerdo != null){
@@ -100,19 +98,14 @@ public class Arvore{
         no.setFB(FB_no_novo);
         noNovo.setFB(FB_noNovo_novo);
 
-        return noNovo;
-
-
     }
-    public No RotacaoDuplaEsquerda(No no){ // -2 e +1 = RDE
+    public void RotacaoDuplaEsquerda(No no){ // -2 e +1 = RDE
         no.setDireito(rotacionarDireita(no.getDireita())); // Falando pro no que vai rotacionar e que sua nova direita vai ser o resultado da rotação do seu filho a direita
-        return rotacionarEsquerda(no);
-
+        rotacionarEsquerda(no);
     }
-    public No RotacaoDuplaDireita(No no){ // +2 e -1 = RDD
+    public void RotacaoDuplaDireita(No no){ // +2 e -1 = RDD
         no.setEsquerdo(rotacionarEsquerda(no.getEsquerdo())); // Falando pro no que vai rotacionar que sua nova esquerda vai ser o resultado da rotação do seu filho a esquerda
-        return rotacionarDireita(no);
-
+        rotacionarDireita(no);
     }
     public void AtualizarFB(){
         
