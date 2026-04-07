@@ -30,18 +30,19 @@ public class Arvore{
 		    return false;
 	}
 }
-    public No buscar(int x, No no){
-	    if (no == null) {
-		    return null;
-	    }
-	    if (no.valor == x){
-		    return no;
-	    } 
-	    if (x < no.valor){
-		    return buscar(x, no.esquerdo);
-	    } else{
-		    return buscar(x,no.direito);
-	    }
+    public No Buscar(int x){
+        No temp = this.raiz;
+
+        while (temp != null){
+            if (temp.valor == x){
+                    break;
+            } else if (temp.valor > x){
+                temp = temp.esquerdo;
+            } else {
+                temp = temp.direito;
+            }
+        }
+        return temp;
     }
     // Utilizei os valores 5 10 e 9 para ajudar na compreensão do código
     public void rotacionarEsquerda(No no){ // "5" 
@@ -107,6 +108,38 @@ public class Arvore{
         no.setEsquerdo(rotacionarEsquerda(no.getEsquerdo())); // Falando pro no que vai rotacionar que sua nova esquerda vai ser o resultado da rotação do seu filho a esquerda
         rotacionarDireita(no);
     }
+    public void Inserir(int valor){
+        No temp =  new No(); // usado apenas para percorrer na árvore
+        No novoNo = new No(); // nó que vai ser inserido
+        int gambiarra = 0;
+        novoNo.valor = valor;
+        if (isEmpty()){
+            temp = novoNo;
+        }
+        while (temp != null){
+            if (temp.valor > valor){
+                if (temp == null) break;
+                temp = temp.esquerdo
+                gambiarra = 1;
+            }else {
+                if (temp == null ) break;
+                temp = temp.direito;
+                gambiarra = 0;
+            }
+            novoNo.setPai(temp);     
+            No pai = novoNo.getPai() // Pai do nó pq precisa avisar pra ele que agr ele vai ter um filho para direita ou para a esquerda
+            if (gambiarra == 1){
+                pai.setEsquerdo(novoNo);
+            }else{
+                pai.setDireito(novoNo);
+            }
+        }
+        AtualizarFB();
+        
+    }
+    public void Remover(No no){
+
+    }
     public void AtualizarFB(){
         
     }
@@ -124,6 +157,12 @@ public class Arvore{
     }
     public int getFB(){
         return fb;
+    }
+    public No getRaiz(){
+        return raiz;
+    }
+    public void setRaiz(No novaRaiz){
+        this.raiz = raiz(novaRaiz);
     }
     public void setFB(int fb){
         this.fb = fb;
