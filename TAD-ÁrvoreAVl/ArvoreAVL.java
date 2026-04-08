@@ -138,6 +138,39 @@ public class Arvore{
         
     }
     public void Remover(No no){
+        No buscar = new node();
+        no pai = buscar.getPai();
+        int gambiarra = 0;
+        if (isEmpty()){
+            buscar = raiz;
+        }
+        while (buscar.valor != no.valor){
+            if (buscar.valor > no.valor){
+                buscar = buscar.esquerdo;
+                gambiarra = 1;
+            } else{
+                buscar = buscar.direito;
+                gambiarra = 0;
+            }
+        }
+        if (buscar.esquerdo == null && buscar.direito == null){ // 1 caso
+            buscar = null;
+            buscar.setPai(null);
+            if (gambiarra == 1){
+                pai.setEsquerdo(null);
+            } else{
+                pai.setDireito(null);
+            }    
+        } else if (buscar.esquerdo == null && buscar.direito != null){ // 2 caso
+                No pai = buscar.getPai() // 15
+                no novoEsquerdo = buscar.getDireito() // 13
+                novoEsquerdo.setPai(pai);
+                pai.setEsquerdo(novoEsquerdo);
+                
+        }
+        
+        // 3 caso
+        AtualizarFB()
 
     }
     public void AtualizarFB(){
