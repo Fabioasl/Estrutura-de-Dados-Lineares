@@ -34,12 +34,12 @@ public class Arvore{
         No temp = this.raiz;
 
         while (temp != null){
-            if (temp.valor == x){
+            if (temp.getValor() == x){
                     break;
-            } else if (temp.valor > x){
-                temp = temp.esquerdo;
+            } else if (temp.getValor()  > x){
+                temp = temp.getEsquerdo();
             } else {
-                temp = temp.direito;
+                temp = temp.getDireito();
             }
         }
         return temp;
@@ -112,12 +112,12 @@ public class Arvore{
         No temp =  new No(); // usado apenas para percorrer na árvore
         No novoNo = new No(); // nó que vai ser inserido
         int gambiarra = 0;
-        novoNo.valor = valor;
+        novoNo.setValor() = valor;
         if (isEmpty()){
             temp = novoNo;
         }
         while (temp != null){
-            if (temp.valor > valor){
+            if (temp.getValor() > valor){
                 if (temp == null) break;
                 temp = temp.esquerdo
                 gambiarra = 1;
@@ -138,43 +138,65 @@ public class Arvore{
         
     }
     public void Remover(No no){
-        No buscar = new node();
-        no pai = buscar.getPai();
-        int gambiarra = 0;
-        if (isEmpty()){
-            buscar = raiz;
-        }
-        while (buscar.valor != no.valor){
-            if (buscar.valor > no.valor){
-                buscar = buscar.esquerdo;
-                gambiarra = 1;
+        No buscar = raiz;
+        no pai = null;
+        while (buscar != null && buscar.getValor() != no.getValor()){
+            pai = buscar;
+            if (buscar.getValor()  > no.getValor()){
+                buscar = buscar.getEsquerdo();    
             } else{
-                buscar = buscar.direito;
-                gambiarra = 0;
+                buscar = buscar.getDireito(); 
             }
         }
-        if (buscar.esquerdo == null && buscar.direito == null){ // 1 caso
-            buscar = null;
-            buscar.setPai(null);
-            if (gambiarra == 1){
+        if (buscar == null) return;
+
+        if (isExternal(buscar)){ // 1 caso
+            if (pai == null){
+                raiz = null;
+            } else if (pai.getEsquerdo() == buscar){
                 pai.setEsquerdo(null);
             } else{
                 pai.setDireito(null);
-            }    
-        } else if (buscar.esquerdo == null && buscar.direito != null){ // 2 caso
-                No pai = buscar.getPai() // 15
-                no novoEsquerdo = buscar.getDireito() // 13
-                novoEsquerdo.setPai(pai);
-                pai.setEsquerdo(novoEsquerdo);
-                
+            }     
+        } else if (buscar.getEsquerdo() != null && buscar.getDireito() == null || (buscar.getDireito() != null && buscar.getEsquerdo() == null)) { // 2 caso
+                No substituido;
+                if (pai == null) {
+                    raiz = substituido;
+                    substituido.setPai(null);
+                }
+                if (buscar.getEsquerdo() != null ) {
+                    substituido = buscar.getEsquerdo();
+                } else {
+                    substituido = buscar.getDireito();
+                }
+                if (pai != null ){
+                    if (pai.getDireito() == buscar){
+                        pai.setDireito(substituido);
+                        substituido.setPai(pai);
+                    } else{
+                        pai.setEsquerdo(substituido);
+                        substituido.setPai(pai);
+                    }
+                }
+        } else { // 3 caso
+            No sucessor = Sucessor(buscar);
+            buscar.setValor(sucessor.getValor());
+            Remover(sucessor);
         }
         
-        // 3 caso
         AtualizarFB()
 
     }
     public void AtualizarFB(){
         
+    }
+    public No Sucessor(No no){ // o no que foi atribuido e o mesmo que foi removido
+        if (no == null || no.getDireito() == null) return null;
+        No sucessor = no.getDireito(); // ponto de partida do while
+        while (sucessor.getEsquerdo() != null ){
+            sucessor = sucessor.getEsquerdo();
+        }
+        return sucessor;
     }
     // Get e Set
     public No getEsquerdo(){
@@ -193,6 +215,12 @@ public class Arvore{
     }
     public No getRaiz(){
         return raiz;
+    }
+    public int getValor(){
+        return valor;
+    }
+    public void setValor(int valor){
+        this.valor = valor;
     }
     public void setRaiz(No novaRaiz){
         this.raiz = raiz(novaRaiz);
