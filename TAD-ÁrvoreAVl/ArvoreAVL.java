@@ -111,6 +111,7 @@ public class Arvore{
     public void Inserir(int valor){
         No temp =  new No(); // usado apenas para percorrer na árvore
         No novoNo = new No(); // nó que vai ser inserido
+        No pai = novoNo.getPai() // Pai do nó pq precisa avisar pra ele que agr ele vai ter um filho para direita ou para a esquerda
         int gambiarra = 0;
         novoNo.setValor() = valor;
         if (isEmpty()){
@@ -119,22 +120,21 @@ public class Arvore{
         while (temp != null){
             if (temp.getValor() > valor){
                 if (temp == null) break;
-                temp = temp.esquerdo
+                temp = temp.getEsquerdo();
                 gambiarra = 1;
             }else {
                 if (temp == null ) break;
-                temp = temp.direito;
+                temp = temp.getDireito();
                 gambiarra = 0;
             }
             novoNo.setPai(temp);     
-            No pai = novoNo.getPai() // Pai do nó pq precisa avisar pra ele que agr ele vai ter um filho para direita ou para a esquerda
             if (gambiarra == 1){
                 pai.setEsquerdo(novoNo);
             }else{
                 pai.setDireito(novoNo);
             }
         }
-        AtualizarFB();
+        AtualizarFBInsercao(novoNo);
         
     }
     public void Remover(No no){
@@ -184,11 +184,57 @@ public class Arvore{
             Remover(sucessor);
         }
         
-        AtualizarFB()
+        AtualizarFBRemocao(no);
 
     }
-    public void AtualizarFB(){
+    public void AtualizarFBInsercao(No no){
+        if (no == raiz) return;
+        No antecessor = no.getPai();
+        while (antecessor != null){
+            if (antecessor.getEsquerdo() == no ){ // se inserção do nó foi a esquerda o fb vai subindo e aumentanto mais 1
+                antecessor.setFB(antecessor.getFB() + 1);
+            } else { // se não foi a esquerda foi para direita então vai subindo e diminuindo -1
+                antecessor.setFB(antecessor.getFB() - 1);
+            } 
+            if (antecessor.getFB() == 0) break;
+
+            // Verifica os FB para fazer as rotações caso quebre a árvore
+            if (antecessor.getFB() == 2) {
+                No temp = antecessor.getEsquerdo();
+                    if (temp.getFB() >= 0) {
+                        rotacionarDireita(antecessor); // LL
+                    } else {
+                        RotacaoDuplaDireita(antecessor); // LR
+                    }
+                    break;
+                } 
+                            
+            if (antecessor.getFB() == -2){
+                No temp = antecessor.getDireito();
+                 if (temp.getFB() <= 0){
+                    rotacionarEsquerda(antecessor); 
+                } else {
+                    RotacaoDuplaEsquerda(antecessor);
+                }     
+               break;
+            } 
+                     
+            no = antecessor;
+            antecessor = antecessor.getPai(); // tem que mudar o valor de antecessor pra ele ir subindo na árvore
+        }  
+    }
+
+
+    public void AtualizarFBRemocao(No no){
+        if (no == raiz) return;
+        No antecessor = no.getPai();
+        while (antecessor != null){ }
+
         
+           
+       
+        no = antecessor;
+        antecessor = antecessor.getPai();
     }
     public No Sucessor(No no){ // o no que foi atribuido e o mesmo que foi removido
         if (no == null || no.getDireito() == null) return null;
