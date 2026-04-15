@@ -81,6 +81,8 @@ public class ArvoreAVL{
     public No rotacionarEsquerda(No no){ // "5" 
         No paiNo = no.getPai(); //  pai do no  "5"
         No noNovo = no.getDireito(); // no "10" é o que vai subir
+        int fbNo = no.getFB();
+        int fbNoNovo = noNovo.getFB();
 
         if (noNovo.getEsquerdo() != null ){ // Caso se o nó que for subir tiver um filho esquerdo
             No noNovoEsquerdo = noNovo.getEsquerdo();
@@ -96,21 +98,24 @@ public class ArvoreAVL{
             } else {
                 paiNo.setDireito(noNovo);
             }
+        } else {
+            raiz = noNovo;
         }
         
         noNovo.setPai(paiNo);
         noNovo.setEsquerdo(no);
-        int FB_no_novo = no.getFB() + 1 + Math.min(noNovo.getFB(),0);
-        int FB_noNovo_novo = noNovo.getFB() - 1 + Math.max(FB_no_novo,0);
+        no.setPai(noNovo);
+        no.setFB(fbNo + 1 - Math.min(fbNoNovo, 0));
+        noNovo.setFB(fbNoNovo + 1 + Math.max(no.getFB(), 0));
 
-        no.setFB(FB_no_novo);
-        noNovo.setFB(FB_noNovo_novo);
         return noNovo;
     }
 
     public No rotacionarDireita(No no){
         No paiNo = no.getPai();
         No noNovo = no.getEsquerdo();
+        int fbNo = no.getFB();
+        int fbNoNovo = noNovo.getFB();
         if (noNovo.getEsquerdo() != null){
             No direito = noNovo.getDireito();
             direito.setPai(no);
@@ -127,11 +132,8 @@ public class ArvoreAVL{
         noNovo.setPai(paiNo);
         noNovo.setDireito(no);
 
-        int FB_no_novo = no.getFB() - 1 - Math.max(noNovo.fb, 0);
-        int FB_noNovo_novo = noNovo.getFB() - 1 + Math.min(FB_no_novo, 0);
-
-        no.setFB(FB_no_novo);
-        noNovo.setFB(FB_noNovo_novo);
+        no.setFB(fbNo - 1 - Math.max(fbNoNovo, 0));
+        noNovo.setFB(fbNoNovo - 1 + Math.min(no.getFB(), 0));
 
         return noNovo;
 
@@ -145,33 +147,35 @@ public class ArvoreAVL{
         rotacionarDireita(no);
     }
     public void Inserir(int valor){
-        No temp =  new No(); // usado apenas para percorrer na árvore
-        No novoNo = new No(); // nó que vai ser inserido
-        No pai = novoNo.getPai(); // Pai do nó pq precisa avisar pra ele que agr ele vai ter um filho para direita ou para a esquerda
-        int gambiarra = 0;
+        No temp = raiz;
+        No pai = null;
+        No novoNo = new No();
         novoNo.setValor(valor);
+
         if (isEmpty()){
-            temp = novoNo;
+            raiz = novoNo;
+            return;
         }
+
         while (temp != null){
-            if (temp.getValor() > valor){
-                if (temp == null) break;
+            pai = temp; 
+
+            if (valor < temp.getValor()){
                 temp = temp.getEsquerdo();
-                gambiarra = 1;
-            }else {
-                if (temp == null ) break;
+            } else {
                 temp = temp.getDireito();
-                gambiarra = 0;
-            }
-            novoNo.setPai(temp);     
-            if (gambiarra == 1){
-                pai.setEsquerdo(novoNo);
-            }else{
-                pai.setDireito(novoNo);
             }
         }
+
+        novoNo.setPai(pai);
+
+        if (valor < pai.getValor()){
+            pai.setEsquerdo(novoNo);
+        } else {
+            pai.setDireito(novoNo);
+        }
+
         AtualizarFBInsercao(novoNo);
-        
     }
     public void Remover(No no){
         No buscar = raiz;
@@ -215,9 +219,30 @@ public class ArvoreAVL{
                     }
                 }
         } else { // 3 caso
+            // System.out.println("valor a ser removido:" + buscar.getValor());
+
             No sucessor = Sucessor(buscar);
+            // System.out.println("sucessor:" + sucessor.getValor());
+
+            // copia o valor
             buscar.setValor(sucessor.getValor());
-            Remover(sucessor);
+
+            No paiSucessor = sucessor.getPai();
+            No filho = sucessor.getDireito(); // único filho possível
+            if (buscar.getDireito() == sucessor) {
+                buscar.setDireito(filho);
+
+                if (filho != null) {
+                    filho.setPai(buscar);
+                }
+
+            } else { 
+                paiSucessor.setEsquerdo(filho);
+
+                if (filho != null) {
+                    filho.setPai(paiSucessor);
+                }
+            }
         }
         
         AtualizarFBRemocao(no);
@@ -227,6 +252,7 @@ public class ArvoreAVL{
         if (no == raiz) return;
         No antecessor = no.getPai();
         while (antecessor != null){
+            // caso eu queria ver os fbs e so descomentar essa linha System.out.println("Visitando: " + antecessor.getValor() + " FB: " + antecessor.getFB());
             if (antecessor.getEsquerdo() == no ){ // se inserção do nó foi a esquerda o fb vai subindo e aumentanto mais 1
                 antecessor.setFB(antecessor.getFB() + 1);
             } else { // se não foi a esquerda foi para direita então vai subindo e diminuindo -1
@@ -256,7 +282,7 @@ public class ArvoreAVL{
             } 
                      
             no = antecessor;
-            antecessor = antecessor.getPai(); // tem que mudar o valor de antecessor pra ele ir subindo na árvore
+            antecessor = no.getPai(); // tem que mudar o valor de antecessor pra ele ir subindo na árvore
         }  
     }
 
@@ -265,7 +291,7 @@ public class ArvoreAVL{
         if (no == raiz) return;
         No antecessor = no.getPai();
         while (antecessor != null){ 
-
+            // caso eu queria ver os fbs e so descomentar essa linha System.out.println("Visitando: " + antecessor.getValor() + " FB: " + antecessor.getFB());
             if (antecessor.getEsquerdo() == no){ // remoçao no lado esquerdo
                 antecessor.setFB(antecessor.getFB() - 1);
             } else{
