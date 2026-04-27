@@ -116,8 +116,9 @@ public class ArvoreAVL{
         No noNovo = no.getEsquerdo();
         int fbNo = no.getFB();
         int fbNoNovo = noNovo.getFB();
-        if (noNovo.getEsquerdo() != null){
+        if (noNovo.getDireito() != null){
             No direito = noNovo.getDireito();
+            no.setEsquerdo(direito);
             direito.setPai(no);
         } else{
             noNovo.setEsquerdo(null);
