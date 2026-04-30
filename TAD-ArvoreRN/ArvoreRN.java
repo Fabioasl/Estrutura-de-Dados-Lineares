@@ -155,7 +155,6 @@ public class ArvoreRN{
         } else {
             tio = vo.getDireito();
         }
-    }
     if (no.getCor() == "rubro" && pai.getCor() == "negro") { // Caso 01: se eu inserir e meu pai for negro 
         break; // então não precisa trocar minha cor.
     } else if (no.getCor() == "rubro" && pai.getCor() == "rubro" && tio.getCor == "rubro") { // Caso 02: se eu for rubro, pai rubro, tio rubro
@@ -186,6 +185,7 @@ public class ArvoreRN{
             RotacaoDuplaEsquerda(no);
         }
  
+    }
     }
         
     
