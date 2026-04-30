@@ -44,7 +44,8 @@ class No{
     public void setCor(String cor){
         this.cor = cor;
     }
-}
+    }
+    }
 
 public class ArvoreRN{
     No raiz;
@@ -331,4 +332,5 @@ public class ArvoreRN{
         return sucessor;
     }
 
+    }
 }
