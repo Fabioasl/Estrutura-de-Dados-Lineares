@@ -148,7 +148,7 @@ public class ArvoreRN{
     public void verificarCor(No no){
         No pai = no.getPai(); // pegando o pai do no
         No vo = pai.getPai(); // pegando o avo apartir do pai do no
-        No tio = null;
+        No tio = new No();
         if (vo.getDireito() == pai ) { // Caso o filho direito do vo for igual ao pai quer dizer que o tio sera o filho esquerdo do vo
             tio = vo.getEsquerdo();
         } else {
@@ -215,8 +215,120 @@ public class ArvoreRN{
     }
     verificarCor(novoNo);
 
-    public Void remover(No no){
+    public void Remover(No no){
+        No buscar = raiz;
+        No pai = null;
+        while (buscar != null && buscar.getValor() != no.getValor()){
+            pai = buscar;
+            if (buscar.getValor()  > no.getValor()){
+                buscar = buscar.getEsquerdo();    
+            } else{
+                buscar = buscar.getDireito(); 
+            }
+        }
+        if (buscar == null) return;
+
+        if (isExternal(buscar)){ // 1 caso
+            if (pai == null){
+                raiz = null;
+            } else if (pai.getEsquerdo() == buscar){
+                pai.setEsquerdo(null);
+            } else{
+                pai.setDireito(null);
+            }     
+        } else if (buscar.getEsquerdo() != null && buscar.getDireito() == null || (buscar.getDireito() != null && buscar.getEsquerdo() == null)) { // 2 caso
+                No substituido = new No();
+                if (pai == null) {
+                    raiz = substituido;
+                    substituido.setPai(null);
+                }
+                if (buscar.getEsquerdo() != null ) {
+                    substituido = buscar.getEsquerdo();
+                } else {
+                    substituido = buscar.getDireito();
+                }
+                if (pai != null ){
+                    if (pai.getDireito() == buscar){
+                        pai.setDireito(substituido);
+                        substituido.setPai(pai);
+                    } else{
+                        pai.setEsquerdo(substituido);
+                        substituido.setPai(pai);
+                    }
+                }
+        } else { // 3 caso
+            No sucessor = Sucessor(buscar);
+            buscar.setValor(sucessor.getValor());
+
+            No paiSucessor = sucessor.getPai();
+            No filho = sucessor.getDireito(); // único filho possível
+            if (buscar.getDireito() == sucessor) {
+                buscar.setDireito(filho);
+
+                if (filho != null) {
+                    filho.setPai(buscar);
+                }
+
+            } else { 
+                paiSucessor.setEsquerdo(filho);
+
+                if (filho != null) {
+                    filho.setPai(paiSucessor);
+                }
+            }
+        }
+        if (no.getCor() == "rubro" && buscar.getCor() == "rubro"){
+            return
+        } else if (no.getCor() == "negro" && buscar.getCor() == "rubro"){
+            buscar.setCor("rubro");
+            return;
+        } else if (no.getCor() == "negro" && buscar.getCor() == "negro"){
+            situacao03(buscar);
+        } else if (no.getCor() == "rubro" && buscar.getCor() == "negro"){
+            buscar.setCor("rubro");
+            situacao03(buscar)
+        }
         
+    }
+    public void situacao03(No v){ // No removido
+        No filho = Sucessor(v); // No sucessor
+        No pai = x.getPai(); // Pai do sucessor
+        No irmao = new No(); // irmão do sucessor
+        if (pai.getEsquerdo == x){
+            irmao = pai.getDireito()
+        } else {
+            irmao = pai.getEsquerdo()
+        }
+        if (filho.getCor() == "negro" && irmao.getCor() == "rubro" && pai.getCor() == "negro"){ // caso 01
+            rotacionarEsquerda(irmao);
+            irmao.setCor("negro"); // o irmão agora é o pai
+            pai.setCor("rubro"); // e o pai virou filho esquerdo do irmão
+            situacao03()
+        
+        }
+        else if (filho.getCor() == "negro" && irmao.getCor() == "negro" && pai.getCor() == "negro"){ // caso 2a
+            irmao.setCor("rubro");
+            if (pai.getPai() != null) {situacao03(pai);} // esse pai.getpai() é uma gambiarra mas ele basicamente se o pai desse pai for null quer dizer q ele é a raiz então não tem pra onde ir
+        } 
+        else if (filho.getCor() == "negro" && irmao.getCor() == "negro" && pai.getCor() == "rubro"){ // caso 2b
+            irmao.setCor("rubro");
+            pai.setCor("negro");
+            return;
+        }
+        caso3
+        else {
+            rotacionarEsquerda(irmao); //rotacione a esquerda
+            irmao.setCor(pai.getCor()); // o irmao que vai virar o pai vai ter a cor do seu antigo pai
+            irmao.getDireito().setCor("negro"); // filho direito do irmao vira negro
+        }
+        return;
+    public No Sucessor(No no){ // o no que foi atribuido e o mesmo que foi removido
+        if (no == null || no.getDireito() == null) return null;
+        No sucessor = no.getDireito(); // ponto de partida do while
+        while (sucessor.getEsquerdo() != null ){
+            sucessor = sucessor.getEsquerdo();
+        }
+        return sucessor;
     }
 
 }
