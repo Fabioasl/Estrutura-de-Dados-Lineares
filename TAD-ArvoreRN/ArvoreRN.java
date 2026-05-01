@@ -305,7 +305,7 @@ public class ArvoreRN{
             pai.setCor("negro");
             return;
         }
-        else if (filho.getCor() == "negro" && irmao.getCor() == "negro") { //  caso3
+        else if (filho.getCor() == "negro" && irmao.getCor() == "negro" &&  irmao.getEsquerdo().getCor() == "rubro" &&  irmao.getDireito().getCor() == "negro") { //  caso3
             rotacionarDireita(irmao);
             irmao.setCor("rubro");
             irmao.getEsquerdo().setCor("negro");
