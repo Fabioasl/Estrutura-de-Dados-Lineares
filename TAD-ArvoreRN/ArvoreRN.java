@@ -83,18 +83,14 @@ public class ArvoreRN{
         }
         return temp;
     }
-        public No rotacionarEsquerda(No no){ // "5" 
+    public No rotacionarEsquerda(No no){ // "5" 
         No paiNo = no.getPai(); //  pai do no  "5"
         No noNovo = no.getDireito(); // no "10" é o que vai subir
-        int fbNo = no.getFB();
-        int fbNoNovo = noNovo.getFB();
 
         if (noNovo.getEsquerdo() != null ){ // Caso se o nó que for subir tiver um filho esquerdo
-            No noNovoEsquerdo = noNovo.getEsquerdo();
-            no.setDireito(noNovoEsquerdo);
-            noNovoEsquerdo.setPai(no);
-        } else{
-            no.setDireito(null);
+            No Esquerdo = noNovo.getEsquerdo();
+            no.setEsquerdo(Esquerdo);
+            Esquerdo.setPai(no);
         }
 
         if (paiNo != null) {
@@ -108,7 +104,7 @@ public class ArvoreRN{
         }
         
         noNovo.setPai(paiNo);
-        noNovo.setEsquerdo(no);
+        noNovo.setDireito(no);
         no.setPai(noNovo);
         return noNovo;
     }
@@ -116,14 +112,10 @@ public class ArvoreRN{
     public No rotacionarDireita(No no){
         No paiNo = no.getPai();
         No noNovo = no.getEsquerdo();
-        int fbNo = no.getFB();
-        int fbNoNovo = noNovo.getFB();
-        if (noNovo.getDireito() != null){
-            No direito = noNovo.getDireito();
-            no.setEsquerdo(direito);
-            direito.setPai(no);
-        } else{
-            noNovo.setEsquerdo(null);
+        if (noNovo.getEsquerdo() != null){
+            No esquerdo = noNovo.getEsquerdo();
+            no.setDireito(esquerdo);
+            esquerdo.setPai(no);
         }
         if (paiNo != null) {
             if (paiNo.getDireito() == no) {
@@ -133,7 +125,8 @@ public class ArvoreRN{
             }
         }
         noNovo.setPai(paiNo);
-        noNovo.setDireito(no);
+        noNovo.setEsquerdo(no);
+        no.setPai(noNovo)
 
         return noNovo;
 
