@@ -136,12 +136,12 @@ public class ArvoreRN{
     public void verificarCor(No no){
         No pai = no.getPai(); // pegando o pai do no
         No vo = pai.getPai(); // pegando o avo apartir do pai do no
+        No tio;
         if (vo == null ){
             no.setCor("negro");
             setRaiz(no);
             return;
         }
-        No tio = new No();
         if (vo.getDireito() == pai ) { // Caso o filho direito do vo for igual ao pai quer dizer que o tio sera o filho esquerdo do vo
             tio = vo.getEsquerdo();
             
@@ -155,6 +155,10 @@ public class ArvoreRN{
             return; // então não precisa trocar minha cor.
         } else if (no.getCor().equals("rubro")  && pai.getCor().equals("rubro") && tio.getCor().equals("rubro") ) { // Caso 02: se eu for rubro, pai rubro, tio rubro
             if (vo == raiz) { // Vo é raiz então ele mantém a cor e seus filhos viram negros.
+                System.out.println("pai:" + pai.getValor());
+                System.out.println("vo:" + vo.getValor());
+                System.out.println("tio:" + tio.getValor());
+                System.out.println("eu:" + no.getValor());
                 System.out.println("debug: foi o caso 2");
                 tio.setCor("negro");
                 pai.setCor("negro");
