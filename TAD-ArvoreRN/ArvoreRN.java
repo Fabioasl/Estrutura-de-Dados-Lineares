@@ -49,7 +49,6 @@ public class ArvoreRN{
     No raiz;
     public ArvoreRN(No raiz){
         this.raiz = raiz;
-        raiz.setCor("negro");
     }
     public No raiz(){
         return this.raiz;
@@ -137,48 +136,64 @@ public class ArvoreRN{
     public void verificarCor(No no){
         No pai = no.getPai(); // pegando o pai do no
         No vo = pai.getPai(); // pegando o avo apartir do pai do no
+        if (vo == null ){
+            no.setCor("negro");
+            setRaiz(no);
+            return;
+        }
         No tio = new No();
         if (vo.getDireito() == pai ) { // Caso o filho direito do vo for igual ao pai quer dizer que o tio sera o filho esquerdo do vo
             tio = vo.getEsquerdo();
+            
         } else {
             tio = vo.getDireito();
         }
-    if (no.getCor() == "rubro" && pai.getCor() == "negro") { // Caso 01: se eu inserir e meu pai for negro 
-        return; // então não precisa trocar minha cor.
-    } else if (no.getCor() == "rubro" && pai.getCor() == "rubro" && tio.getCor() == "rubro") { // Caso 02: se eu for rubro, pai rubro, tio rubro
-        if (vo == raiz) { // Vo é raiz então ele mantém a cor e seus filhos viram negros.
-            tio.setCor("negro");
-            pai.setCor("negro");
-        } else { // Vo não é raiz então ele vira rubro e seus filhos negros.
-            vo.setCor("rubro");
-            pai.setCor("negro");
-            tio.setCor("negro");
+        
+        
+        if (no.getCor().equals("rubro")  && pai.getCor().equals("negro") ) { // Caso 01: se eu inserir e meu pai for negro 
+            System.out.println("debug: foi o caso 1");
+            return; // então não precisa trocar minha cor.
+        } else if (no.getCor().equals("rubro")  && pai.getCor().equals("rubro") && tio.getCor().equals("rubro") ) { // Caso 02: se eu for rubro, pai rubro, tio rubro
+            if (vo == raiz) { // Vo é raiz então ele mantém a cor e seus filhos viram negros.
+                System.out.println("debug: foi o caso 2");
+                tio.setCor("negro");
+                pai.setCor("negro");
+            } else { // Vo não é raiz então ele vira rubro e seus filhos negros.
+                System.out.println("debug: foi o caso 3");
+                vo.setCor("rubro");
+                pai.setCor("negro");
+                tio.setCor("negro");
+            }
+        } else { // Caso 03: eu sou rubro, pai rubro, vo negro e tio negro
+            System.out.println("debug: foi o caso 4");
+            if (vo.getDireito().getCor().equals("rubro") && vo.getEsquerdo().getCor().equals("negro") && no.getCor().equals("rubro") ){ // rotacionar para a esquerda
+                pai.setCor("negro");
+                vo.setCor("rubro");
+                rotacionarEsquerda(pai);
+            } else if (vo.getDireito().getCor().equals("negro") && vo.getEsquerdo().getCor().equals("rubro") && no.getCor().equals("rubro") ){ // rotacionar para a direita
+                System.out.println("debug: foi o caso 4");
+                pai.setCor("negro");
+                vo.setCor("rubro");
+                rotacionarDireita(pai);
+            } else if (vo.getCor().equals("negro") && tio.getCor().equals("negro") && pai.getCor().equals("rubro") && pai.getEsquerdo().getCor().equals("rubro") ){ // Rotação direita dupla
+                System.out.println("debug: foi o caso 4");
+                no.setCor("negro");
+                vo.setCor("rubro");
+                RotacaoDuplaDireita(no);
+            } else{ // Rotação dupla esquerda
+                System.out.println("debug: foi o caso 4");
+                no.setCor("negro");
+                vo.setCor("rubro");
+                RotacaoDuplaEsquerda(no);
+            }
+    
         }
-    } else { // Caso 03: eu sou rubro, pai rubro, vo negro e tio negro
-        if (vo.getDireito().getCor()  == "rubro" && vo.getEsquerdo().getCor()  == "negro"  && no.getCor()  == "rubro"){ // rotacionar para a esquerda
-            pai.setCor("negro");
-            vo.setCor("rubro");
-            rotacionarEsquerda(pai);
-        } else if (vo.getDireito().getCor() == "negro" && vo.getEsquerdo().getCor()  == "rubro"  && no.getCor()  == "rubro"){ // rotacionar para a direita
-            pai.setCor("negro");
-            vo.setCor("rubro");
-            rotacionarDireita(pai);
-        } else if (vo.getCor() == "negro" && tio.getCor() == "negro" && pai.getCor() == "rubro" && pai.getEsquerdo().getCor() == "rubro" ){ // Rotação direita dupla
-            no.setCor("negro");
-            vo.setCor("rubro");
-            RotacaoDuplaDireita(no);
-        } else{ // Rotação dupla esquerda
-            no.setCor("negro");
-            vo.setCor("rubro");
-            RotacaoDuplaEsquerda(no);
-        }
- 
-    }
     }
         
     
     public void inserir (int valor){
         No novoNo = new No();
+        novoNo.setValor(valor);
         if (isEmpty()) { // se a árvore tiver vazia novo no é o raiz.
             raiz = novoNo;
             return;
@@ -266,14 +281,14 @@ public class ArvoreRN{
                 }
             }
         }
-        if (no.getCor() == "rubro" && buscar.getCor() == "rubro"){ // situação 01 não precisa fazer nada
+        if (no.getCor().equals("rubro") && buscar.getCor().equals("rubro")){ // situação 01 não precisa fazer nada
             return;
-        } else if (no.getCor() == "negro" && buscar.getCor() == "rubro"){ // situação 02 apenas mudo a cor do nó que vai subir para rubro
+        } else if (no.getCor().equals("negro")  && buscar.getCor().equals("rubro") ){ // situação 02 apenas mudo a cor do nó que vai subir para rubro
             sucessor.setCor("rubro");
             return;
-        } else if (no.getCor() == "negro" && buscar.getCor() == "negro"){ // situação 03 vai ter q ser feita a análise dos 4 casos
+        } else if (no.getCor().equals("negro") && buscar.getCor() == "negro"){ // situação 03 vai ter q ser feita a análise dos 4 casos
             situacao03(sucessor);
-        } else if (no.getCor() == "rubro" && buscar.getCor() == "negro"){ // situação 04 pinto a cor do sucessor do nó de rubro e vai ter que ser feita a análise dos 4 casos da situação 03
+        } else if (no.getCor().equals("rubro") && buscar.getCor().equals("negro")){ // situação 04 pinto a cor do sucessor do nó de rubro e vai ter que ser feita a análise dos 4 casos da situação 03
             sucessor.setCor("rubro");
             situacao03(sucessor);
         }
@@ -289,23 +304,23 @@ public class ArvoreRN{
         } else {
             irmao = pai.getEsquerdo();
         }
-        if (filho.getCor() == "negro" && irmao.getCor() == "rubro" && pai.getCor() == "negro"){ // caso 01
+        if (filho.getCor().equals("negro")  && irmao.getCor().equals("rubro") && pai.getCor().equals("negro")){ // caso 01
             rotacionarEsquerda(irmao);
             irmao.setCor("negro"); // o irmão agora é o pai
             pai.setCor("rubro"); // e o pai virou filho esquerdo do irmão
             situacao03(pai.getEsquerdo());
         
         }
-        else if (filho.getCor() == "negro" && irmao.getCor() == "negro" && pai.getCor() == "negro"){ // caso 2a
+        else if (filho.getCor().equals("negro") && irmao.getCor().equals("negro") && pai.getCor().equals("negro") ){ // caso 2a
             irmao.setCor("rubro");
             if (pai.getPai() != null) {situacao03(pai);} // esse pai.getpai() é uma gambiarra mas ele basicamente se o pai desse pai for null quer dizer q ele é a raiz então não tem pra onde ir
         } 
-        else if (filho.getCor() == "negro" && irmao.getCor() == "negro" && pai.getCor() == "rubro"){ // caso 2b caso terminal 
+        else if (filho.getCor().equals("negro") && irmao.getCor().equals("negro") && pai.getCor().equals("rubro")){ // caso 2b caso terminal 
             irmao.setCor("rubro");
             pai.setCor("negro");
             return;
         }
-        else if (filho.getCor() == "negro" && irmao.getCor() == "negro" &&  irmao.getEsquerdo().getCor() == "rubro" &&  irmao.getDireito().getCor() == "negro") { //  caso3
+        else if (filho.getCor().equals("negro") && irmao.getCor().equals("negro") &&  irmao.getEsquerdo().getCor().equals("rubro") &&  irmao.getDireito().getCor().equals("negro")) { //  caso3
             rotacionarDireita(irmao);
             irmao.setCor("rubro");
             irmao.getEsquerdo().setCor("negro");
@@ -316,7 +331,7 @@ public class ArvoreRN{
             irmao.setCor(pai.getCor()); // o irmao que vai virar o pai vai ter a cor do seu antigo pai
             irmao.getDireito().setCor("negro"); // filho direito do irmao vira negro
         }
-        else if (filho.getCor() == "negro" && irmao.getCor() == "negro" && irmao.getDireito().getCor() == "rubro") { // caso 04 caso terminal
+        else if (filho.getCor().equals("negro") && irmao.getCor().equals("negro") && irmao.getDireito().getCor().equals("rubro")) { // caso 04 caso terminal
             rotacionarEsquerda(irmao); //rotacione a esquerda
             irmao.setCor(pai.getCor()); // o irmao que vai virar o pai vai ter a cor do seu antigo pai
             irmao.getDireito().setCor("negro"); // filho direito do irmao vira negro
@@ -330,5 +345,13 @@ public class ArvoreRN{
             sucessor = sucessor.getEsquerdo();
         }
         return sucessor;
+    }
+
+    // Get e Set
+    public No getRaiz(){
+        return raiz;
+    }
+    public void setRaiz(No novaRaiz){
+        this.raiz = novaRaiz;
     }
 }
